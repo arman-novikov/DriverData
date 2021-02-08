@@ -2,10 +2,13 @@
 #include <boost/circular_buffer.hpp>
 #include <chrono>
 
-static constexpr size_t INTERIM_MULTIPLIER {60U}; // seconds
-static constexpr size_t SMALL_INTERIM {15U};
-static constexpr size_t BIG_INTERIM {60U};
+// assuming second is the min quanting unit
+
+static constexpr size_t SMALL_INTERIM {15U * 60U};
+static constexpr size_t BIG_INTERIM {60U * 60U};
 static constexpr size_t INTERIM_RATIO {BIG_INTERIM / SMALL_INTERIM};
+
+// measured with SMALL_INTERIMs
 static constexpr size_t SLEEP {7U * INTERIM_RATIO};
 static constexpr size_t MAX_ON_ORDER {17U * INTERIM_RATIO};
 static constexpr size_t MAX_ONLINE {7U * INTERIM_RATIO};
@@ -28,7 +31,7 @@ public:
     void Update(const online_data_t& online_data,
                 size_t on_order_time,
                 const timestamp_t& ts);
-private:
+public:
     online_data_t onlineData_;
     size_t onOrder_;
 
