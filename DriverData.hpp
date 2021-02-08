@@ -2,6 +2,7 @@
 #include <boost/circular_buffer.hpp>
 #include <chrono>
 
+static constexpr size_t INTERIM_MULTIPLIER {60U}; // seconds
 static constexpr size_t SMALL_INTERIM {15U};
 static constexpr size_t BIG_INTERIM {60U};
 static constexpr size_t INTERIM_RATIO {BIG_INTERIM / SMALL_INTERIM};
@@ -19,6 +20,7 @@ typedef boost::circular_buffer<online_t> online_data_t;
 typedef std::time_t timestamp_t;
 
 //std::chrono::time_point<std::chrono::system_clock>
+
 class DriverData
 {
 public:
