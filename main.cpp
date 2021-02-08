@@ -66,6 +66,7 @@ void print(const timestamp_t& tp) {
 int main(int, char*[])
 {
     using namespace std::chrono_literals;
+
     auto flr = std::bind(floor, std::placeholders::_1, SMALL_INTERIM);
     DriverData dd;
     auto onl = online_data_t(ONLINE_WINDOW_SIZE);
