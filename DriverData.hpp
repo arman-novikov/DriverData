@@ -37,11 +37,16 @@ public:
     void Update(const online_data_t& online_data,                
                 const timestamp_t& ts);
 
+    std::vector<timestamp_t>
+        ProcessWindow(std::vector<status_t>& data, timestamp_t ts);
+
     void SetOnOrder(size_t on_order);
     on_order_review_t GetOnOrder() const;
     std::optional<timestamp_t> GetWorkStart() const;
     online_review_t GetOnline() const;
 public:
+    static timestamp_t
+        Interim2Timestamp(timestamp_t ts, size_t reverse_offset);
     online_data_t onlineData_;
     size_t onOrder_;
 

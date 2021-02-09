@@ -11,7 +11,6 @@ std::vector<timestamp_t>
 DriverData::ProcessWindow(std::vector<status_t>& data, timestamp_t ts)
 {
     // assert not empty
-    std::vector<timestamp_t> res;
     size_t offset = 0;
     auto start = data.rbegin();
     auto end = data.rend(); // - SLEEP?
