@@ -11,13 +11,11 @@ DriverData::DriverData():
  * todo: use a templated online_data ?
 */
 void DriverData::Update(const online_data_t& online_data,
-            size_t on_order_time,
             const timestamp_t& ts)
 {
     if (onlineData_.empty()) {
         onlineData_.insert(onlineData_.begin(),
                            online_data.begin(), online_data.end());
-        onOrder_ = on_order_time;
         timestamp_ = ts;
         return;
     }
@@ -49,5 +47,14 @@ void DriverData::Update(const online_data_t& online_data,
                        online_data.end() - interim_diff,
                        online_data.end());
     timestamp_ = ts;
-    onOrder_ = on_order_time;
+}
+
+void DriverData::SetOnOrder(size_t on_order)
+{
+    onOrder_ = on_order;
+}
+
+size_t DriverData::GetOnOrder() const
+{
+    return onOrder_;
 }

@@ -28,9 +28,11 @@ class DriverData
 {
 public:
     DriverData();
-    void Update(const online_data_t& online_data,
-                size_t on_order_time,
+    void Update(const online_data_t& online_data,                
                 const timestamp_t& ts);
+
+    void SetOnOrder(size_t on_order);
+    size_t GetOnOrder() const;
 public:
     online_data_t onlineData_;
     size_t onOrder_;

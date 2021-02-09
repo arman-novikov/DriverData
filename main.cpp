@@ -74,12 +74,12 @@ int main(int, char*[])
     onl.insert(onl.begin(), d1.begin(), d1.end());
     auto now = std::chrono::system_clock::now();
     print(flr(now));
-    dd.Update(onl, 100500, flr(now));
+    dd.Update(onl, flr(now));
 
     onl.clear();
     onl.insert(onl.begin(), d2.begin(), d2.end());
     now += 2h;
-    dd.Update(onl, 100500, flr(now));
+    dd.Update(onl, flr(now));
     print(flr(now));
 
     for (auto i: dd.onlineData_) {
