@@ -32,7 +32,6 @@ void DriverData::Update(const online_data_t& online_data,
 
     // todo: extract into a method patch_missing_data()
     // or throw an exception?
-    // misoperating!!!
     if (online_data.size() < interim_diff) {
         // means some data is missing
         // gonna patch it with default values: OFFLINE
@@ -47,6 +46,69 @@ void DriverData::Update(const online_data_t& online_data,
                        online_data.end() - interim_diff,
                        online_data.end());
     timestamp_ = ts;
+}
+
+std::optional<timestamp_t> DriverData::GetWorkStart() const
+{
+    auto interim2timestamp_t = [] (timestamp_t ts, size_t reverse_offset)
+            -> timestamp_t
+    {
+        return ts - reverse_offset * SMALL_INTERIM;
+    };
+    size_t res = 0;
+    auto start = onlineData_.rbegin();
+    auto end = onlineData_.rend();
+    if (onlineData_.empty()) {
+        return std::nullopt;
+    }
+
+    while(start != end) {
+        size_t occurency_count = std::count(start,
+                                            start + SLEEP,
+                                            OFFLINE);
+        if (occurency_count == SLEEP) {
+            return interim2timestamp_t(timestamp_, res);
+        }
+        ++start;
+        ++res;
+    }
+
+    for (res = 0; res < onlineData_.size(); ++res) {
+        if(onlineData_[res] == ONLINE) {
+            break;
+        }
+    }
+
+    if (res == onlineData_.size()) {
+        // iterated to the end and no ONLINE mark is found
+        return std::nullopt;
+    }
+
+    res = onlineData_.size() - res - 1; // -1 since we need a reverse index (from end)
+    return interim2timestamp_t(timestamp_, res);
+}
+
+/*!
+ * @return count of online statuses from work start
+ */
+size_t DriverData::GetOnline() const
+{
+    auto timestamp_t2interims = [] (timestamp_t from, timestamp_t to)
+            -> size_t
+    {
+        return to - from / SMALL_INTERIM;
+    };
+
+    auto from_ts = GetWorkStart();
+    if (from_ts == std::nullopt) {
+        return 0;
+    }
+
+    size_t offset = timestamp_t2interims(from_ts.value(), timestamp_);
+    size_t online_interims = std::count(
+                onlineData_.end() - offset, onlineData_.end(),
+                ONLINE);
+    return online_interims;
 }
 
 void DriverData::SetOnOrder(size_t on_order)
