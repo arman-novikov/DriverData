@@ -36,10 +36,8 @@ void DriverData::Update(const online_data_t& online_data,
         // means some data is missing
         // gonna patch it with default values: OFFLINE
         size_t patch_count = interim_diff - online_data.size();
+        onlineData_.insert(onlineData_.end(), patch_count, OFFLINE);
         interim_diff -= patch_count;
-        while(patch_count--) {
-            onlineData_.push_back(OFFLINE);
-        }
     }
 
     onlineData_.insert(onlineData_.end(),
