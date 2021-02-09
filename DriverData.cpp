@@ -89,7 +89,7 @@ std::optional<timestamp_t> DriverData::GetWorkStart() const
 /*!
  * @return count of online statuses from work start
  */
-size_t DriverData::GetOnline() const
+DriverData::online_review_t DriverData::GetOnline() const
 {
     auto timestamp_t2interims = [] (timestamp_t from, timestamp_t to)
             -> size_t
@@ -99,14 +99,18 @@ size_t DriverData::GetOnline() const
 
     auto from_ts = GetWorkStart();
     if (from_ts == std::nullopt) {
-        return 0;
+        return {0U, ONLINE_WINDOW_SIZE};
     }
 
     size_t offset = timestamp_t2interims(from_ts.value(), timestamp_);
     size_t online_interims = std::count(
                 onlineData_.end() - offset, onlineData_.end(),
                 ONLINE);
-    return online_interims;
+
+    size_t request_offset = online_interims > MAX_ONLINE ? 1:
+        MAX_ONLINE - online_interims;
+
+    return {online_interims, request_offset};
 }
 
 void DriverData::SetOnOrder(size_t on_order)
@@ -114,7 +118,7 @@ void DriverData::SetOnOrder(size_t on_order)
     onOrder_ = on_order;
 }
 
-size_t DriverData::GetOnOrder() const
+DriverData::on_order_review_t DriverData::GetOnOrder() const
 {
-    return onOrder_;
+    return {onOrder_, GetWorkStart()};
 }

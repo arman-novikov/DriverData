@@ -5,14 +5,14 @@
 
 #include "DriverData.hpp"
 
-std::initializer_list<online_t> d1 {
+std::initializer_list<status_t> d1 {
     //0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1
     //0, 1, 1, 1, 1, 1, 1
     //0, 0, 1, 1, 1, 1, 1, 1, 0
     1, 1, 1, 1, 1, 1, 1, 1, 1,
 };
 
-std::initializer_list<online_t> d2 {
+std::initializer_list<status_t> d2 {
     // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     1, 1, 1, 1
 };

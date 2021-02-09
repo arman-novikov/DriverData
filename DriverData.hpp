@@ -17,28 +17,30 @@ static constexpr size_t ONLINE_WINDOW_SIZE {
         2*SLEEP + std::max(MAX_ON_ORDER, MAX_ONLINE)
 };
 
-typedef uint8_t online_t;
-static constexpr online_t ONLINE {1U};
-static constexpr online_t OFFLINE {0U};
-typedef boost::circular_buffer<online_t> online_data_t;
+typedef uint8_t status_t;
+static constexpr status_t ONLINE {1U};
+static constexpr status_t OFFLINE {0U};
+typedef boost::circular_buffer<status_t> online_data_t;
 typedef std::time_t timestamp_t;
 
 //std::chrono::time_point<std::chrono::system_clock>
 
 class DriverData
 {
-    //
-    typedef std::pair<size_t, size_t> online_status_t;
+    // online interims, interims count to request from
+    typedef std::pair<size_t, size_t> online_review_t;
+
+    //on order time, from
+    typedef std::pair<size_t, std::optional<timestamp_t>> on_order_review_t;
 public:
     DriverData();
     void Update(const online_data_t& online_data,                
                 const timestamp_t& ts);
 
     void SetOnOrder(size_t on_order);
-    size_t GetOnOrder() const;
+    on_order_review_t GetOnOrder() const;
     std::optional<timestamp_t> GetWorkStart() const;
-    size_t GetOnline() const;
-
+    online_review_t GetOnline() const;
 public:
     online_data_t onlineData_;
     size_t onOrder_;
